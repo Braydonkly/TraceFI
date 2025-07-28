@@ -1,0 +1,30 @@
+<% if (notifications && notifications.length > 0) { %>
+  <div class="dropdown me-3">
+    <button class="btn btn-link position-relative" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color: #fff; font-size: 1.5rem;">
+      <i class="bi bi-bell"></i>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        <%= notifications.length %>
+      </span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown" style="min-width: 350px;">
+      <% notifications.forEach(function(notif) { %>
+        <li class="px-3 py-2 border-bottom">
+          <div class="fw-bold"><%= notif.title %></div>
+          <div class="small text-muted mb-1"><%= notif.time %></div>
+          <div><%= notif.message %></div>
+          <% if (notif.link) { %>
+            <a href="<%= notif.link %>" target="_blank" class="btn btn-sm btn-primary mt-1">Open</a>
+          <% } %>
+        </li>
+      <% }) %>
+      <li class="text-center small text-muted py-2"><a href="/notifications">View all</a></li>
+    </ul>
+  </div>
+<% } else { %>
+  <div class="me-3">
+    <button class="btn btn-link position-relative" style="color: #fff; font-size: 1.5rem;" disabled>
+      <i class="bi bi-bell"></i>
+    </button>
+  </div>
+<% } %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">

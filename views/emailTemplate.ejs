@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <style>
+      .alert {
+        color: goldenrod;
+        background-color: lightgoldenrodyellow;
+      }
+
+      .button {
+        width: 10%;
+        border-color: black;
+        font-weight: bold;
+      }
+
+      .button a {
+        color:white;
+        text-decoration: none;
+      }
+
+      #accept {
+        background-color:green;
+      }
+
+      #accept:hover {
+        color: gray;
+        background-color: darkgreen;
+      }
+
+      #reject {
+        background-color:red;
+      }
+
+      #reject:hover {
+        color: gray;
+        background-color: darkred;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Dear Compliance Officer,</p>
+    <p class="alert">
+      <b>Action Required! - Review Client Risk Assessment</b>
+      <br>
+      A client risk status has been submitted by <%= details.institute_name %> via the TraceFi platform.
+      Your review is requested to confirm or challenge the assigned risk level.
+    </p>
+    <p>Client Name: <%= details.client_name %></p>
+    <p>
+      Risk Level:
+      <% if (details.risk_status.toUpperCase() == 'MEDIUM') { %>
+        <span style="color:orange"><%= details.risk_status.toUpperCase() %></span>
+      <% } else { %>
+        <span style="color:red"><%= details.risk_status.toUpperCase() %></span>
+      <% } %>
+    </p>
+    <p><b>Risk Score Breakdown:</b></p>
+    <ul>
+      <% if (details.riskScoreBreakdown && details.riskScoreBreakdown.length > 0) { %>
+        <% details.riskScoreBreakdown.forEach(function(item) { %>
+          <li><%= item.label %>: <%= item.value %></li>
+        <% }) %>
+      <% } else { %>
+        <li>No risk scores available.</li>
+      <% } %>
+    </ul>
+    <p><b>Client Transaction Breakdown:</b></p>
+    <% if (details.transactions && details.transactions.length > 0) { %>
+      <table border="1" cellpadding="5" style="border-collapse:collapse;">
+        <tr>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Country</th>
+          <th>Risk Score</th>
+          <th>AML Reason</th>
+        </tr>
+        <% details.transactions.forEach(function(txn) { %>
+          <tr>
+            <td><%= txn.transaction_type %></td>
+            <td><%= txn.amount %></td>
+            <td><%= txn.transaction_status %></td>
+            <td><%= txn.country %></td>
+            <td><%= txn.risk_score %></td>
+            <td><%= txn.red_flags || '-' %></td>
+          </tr>
+        <% }) %>
+      </table>
+    <% } else { %>
+      <p>No transactions found for this client.</p>
+    <% } %>
+    <% if (details.riskReasons && details.riskReasons.length > 0) { %>
+      <p><b>Reason(s) for AML Listing:</b></p>
+      <ul>
+        <% details.riskReasons.forEach(function(reason) { %>
+          <li><%= reason %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+    <p>Submitted By: <%= details.institute_name %></p>
+    <p>
+      Date:
+      <% let date = new Date() %>
+      <% let tempStr = date.toDateString() %>
+      <% let dateStr = tempStr.substring(4, 10) + ', ' +  tempStr.substring(11) %>
+      <%= dateStr %>
+    </p>
+    <% if (details.responseSubmitted) { %>
+      <div style="margin-top:20px; color:green; font-weight:bold;">You have submitted your response. Thank you!</div>
+    <% } else { %>
+      <b>Please review the details and indicate your decision:</b>
+      <br>
+      <span style="color:orange;font-size:1.1em;">
+        ACCEPT = Confirm and flag client as higher risk.<br>
+        REJECT = Do not flag client as higher risk.<br>
+        <b>Note:</b> Clients with medium or high risk are always onboarded; this decision only affects their flagged status.
+      </span>
+      <br><br>
+      <% let base_url = 'http://localhost:3000' %>
+      <button id="accept" class="button">
+        <a href="<%= base_url %>/accept/<%= details.client_id %>/<%= details.risk_status.toLowerCase() %>?fi=<%= details.fi_id %>">ACCEPT</a>
+      </button>
+      <a id="reject" class="button" style="display:inline-block;text-align:center;text-decoration:none;color:white;" href="<%= base_url %>/reject/<%= details.client_id %>/<%= details.risk_status.toLowerCase() %>?fi=<%= details.fi_id %>"><span style="color:inherit;text-decoration:none;">REJECT</span></a>
+    <% } %>
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Clients | TraceFI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    body {
+      background-color: #0A0F24;
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    main {
+      padding: 80px 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .client-card {
+      background-color: #1F2937;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .client-card p {
+      margin: 0 0 10px;
+      color: #e5e7eb;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #9CA3AF;
+    }
+
+    .risk-red {
+      color: #ff4d4d;
+    }
+
+    .risk-green {
+      color: #00FFD1;
+    }
+
+    .btn-client {
+      background-color: #00C4FF;
+      color: #0A0F24;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .btn-client:hover {
+      background-color: #00a8e1;
+    }
+
+    .btn-outline-info, .btn-outline-danger {
+      border-radius: 30px;
+      font-weight: 600;
+      padding: 6px 16px;
+    }
+
+    .btn i {
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('partials/navbar.ejs') %>
+
+  <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+    <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="margin-top: 20px;">
+      <%= success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+
+  <main class="container">
+    <div class="text-center">
+      <h1>All Clients</h1>
+      <p><span class="info-label">Total Clients:</span> <%= clients.length %></p>
+    </div>
+    <h3 style="color:#00FFD1;">Database Clients</h3>
+    <% clients.filter(c => !c.on_blockchain).forEach(client => { %>
+      <div class="client-card">
+        <p><span class="info-label">Name:</span> <%= client.client_name %></p>
+        <p>
+          <span class="info-label">Risk Status:</span>
+          <% if (client.risk_status === 'N/A') { %>
+            <% if (client.FI_id !== currentFI) { %>
+              <span>N/A</span>
+              <span title="Pending action" class="ms-2 d-inline-flex align-items-center">
+                <i class="bi bi-bell-check" style="color:#00FFD1;font-size:1.3em;"></i>
+                <span class="ms-1" style="color:#00FFD1;font-size:1em;">Pending your response</span>
+              </span>
+            <% } else { %>
+              <span>N/A</span>
+            <% } %>
+          <% } else if (client.risk_status && client.risk_status.toLowerCase().includes('blocked')) { %>
+            <span class="risk-red">Blocked</span>
+          <% } else { %>
+            <span><%= client.risk_status || 'Unknown' %></span>
+          <% } %>
+          <% if (client.warning_flag) { %>
+            <span class="ms-2" title="Warning: High risk details, but not on blockchain">
+              <i class="bi bi-exclamation-triangle-fill" style="color:orange;"></i> <span style="color:orange;">Warning</span>
+            </span>
+          <% } %>
+        </p>
+        <div class="d-flex gap-2 align-items-center mt-2">
+          <a href="/client/<%= client.client_id %>" class="btn-client">See Client Info</a>
+          <% 
+            // Hide Send Email button if client.hideSendEmail is true
+            if (client.FI_id === currentFI && (client.risk_status === 'N/A' || client.risk_status === 'High' || client.risk_status === 'Medium') && !client.warning_flag && !client.on_blockchain && !client.hideSendEmail) { %>
+            <a href="/send-email/<%= client.client_id %>" class="btn btn-outline-warning d-flex align-items-center gap-1" style="margin-left:10px;">
+              <i class="bi bi-envelope"></i> Send Email
+            </a>
+          <% } %>
+        </div>
+        <% if (client.FI_id === currentFI) { %>
+          <div class="d-flex gap-2 mt-3">
+            <a href="/editclient/<%= client.client_id %>" class="btn btn-outline-info d-flex align-items-center gap-1">
+              <i class="bi bi-pencil-square"></i> Edit
+            </a>
+            <form action="/deleteclient/<%= client.client_id %>" method="POST" onsubmit="return confirm('Are you sure?')">
+              <button type="submit" class="btn btn-outline-danger d-flex align-items-center gap-1">
+                <i class="bi bi-trash3"></i> Delete
+              </button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+    <% }) %>
+    <h3 style="color:#00FFD1;">Blockchain Clients</h3>
+    <% if (typeof blockchainClients !== 'undefined' && blockchainClients.length > 0) { %>
+      <% blockchainClients.forEach(client => { %>
+        <div class="client-card">
+          <p><span class="info-label">Name:</span> <%= client.client_name %></p>
+          <p><span class="info-label">Risk Status:</span> <span class="risk-red"><%= client.risk_status || 'On Blockchain' %></span></p>
+          <a href="/client/<%= client.client_id %>" class="btn-client">See Client Info</a>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="client-card">
+        <p>No blockchain clients found.</p>
+      </div>
+    <% } %>
+  </main>
+</body>
+</html>

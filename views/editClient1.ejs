@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Client - TraceFI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #0A0F24;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background: url('/images/client1.jpg') center/cover no-repeat;
+      filter: blur(2px) brightness(0.6);
+      z-index: -1;
+    }
+    .form-container {
+      max-width: 650px;
+      background-color: white;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 30px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+      color: #000;
+    }
+    h1 {
+      font-size: 1.8rem;
+      border: 3px solid #a259ff;
+      padding: 10px;
+      display: inline-block;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    .btn-submit {
+      width: 100%;
+      background-color: #00cfff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: bold;
+    }
+    .btn-submit:hover { background-color: #00a6cc; }
+  </style>
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg" style="background-color: #0A0F24;">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white fw-bold" href="<%= session.user ? '/home' : '/' %>">TraceFI</a>
+
+    <% if (session.user && session.user.employee_id) { %>
+      <span class="navbar-text ms-2 text-info fw-bold" style="font-size:1.1rem;">Employee ID: <%= session.user.employee_id %></span>
+    <% } %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <% /* Always define showUnread at the very top for all includes */ %>
+      <% if (typeof showUnread === 'undefined') { var showUnread = true; } %>
+      <ul class="navbar-nav ms-auto align-items-center">
+
+        <li class="nav-item">
+          <a class="nav-link text-white" href="<%= session.user ? '/home' : '/' %>">Home</a>
+        </li>
+
+
+        <% if (session.user) { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Services
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="servicesDropdown">
+              <% if (session.user.role === 'admin') { %>
+                <li><a class="dropdown-item text-white" href="/institutions">View Institutions</a></li>
+                <li><a class="dropdown-item text-white" href="/register-admin">Register New Admin</a></li>
+
+              <% } else if (session.user.role === 'user') { %>
+                <li><a class="dropdown-item text-white" href="/institutions">View Institutions</a></li>
+                <li><a class="dropdown-item text-white" href="/all-clients">View Clients</a></li>
+                <li><a class="dropdown-item text-white" href="/addclient1">Add Client</a></li>
+                <li><a class="dropdown-item text-white" href="/reports">View Report</a></li>
+              <% } %>
+            </ul>
+          </li>
+        <% } %>
+
+        <% if (session.user) { %>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/notifications">
+              Notifications
+              <% if (showUnread && session.user.unreadCount && session.user.unreadCount > 0) { %>
+                <span class="badge bg-danger"><%= session.user.unreadCount %></span>
+              <% } %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/myaccount">My Account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/logout">Logout</a>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/login">Login</a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container my-5">
+  <div class="form-container">
+    <h1>Edit Client Details</h1>
+    <form action="/editclient/<%= client.client_id %>" method="POST" enctype="multipart/form-data">
+      <input type="text" name="client_name" value="<%= client.client_name %>" required>
+      <input type="text" name="client_NRIC" value="<%= client.client_NRIC %>" required>
+      <input type="text" name="client_nationality" value="<%= client.client_nationality %>" required>
+      <input type="text" name="client_citizenship" value="<%= client.client_citizenship %>" required>
+      <input type="text" name="client_address" value="<%= client.client_address %>" required>
+      <input type="text" name="client_postalcode" value="<%= client.client_postalcode %>" required>
+      <input type="text" name="client_gender" value="<%= client.client_gender %>" required>
+      <input type="text" name="client_cob" value="<%= client.client_cob %>" required>
+      <input type="date" name="client_dob" value="<%= client.client_dob %>" required>
+      <input type="text" name="client_home_number" value="<%= client.client_home_number %>">
+      <input type="text" name="client_phone_number" value="<%= client.client_phone_number %>" required>
+      <input type="text" name="client_occupation" value="<%= client.client_occupation %>" required>
+      <input type="text" name="client_employer_name" value="<%= client.client_employer_name %>" required>
+      <input type="text" name="client_employer_number" value="<%= client.client_employer_number %>" required>
+
+      <select name="customer_type" required>
+        <option value="">Customer Type</option>
+        <option value="Individual" <%= client.customer_type === 'Individual' ? 'selected' : '' %>>Individual</option>
+        <option value="Offshore company" <%= client.customer_type === 'Offshore company' ? 'selected' : '' %>>Offshore company</option>
+        <option value="Trust" <%= client.customer_type === 'Trust' ? 'selected' : '' %>>Trust</option>
+      </select>
+
+      <select name="pep_status" required>
+        <option value="">PEP Status</option>
+        <option value="No" <%= client.pep_status === 'No' ? 'selected' : '' %>>No</option>
+        <option value="Foreign PEP" <%= client.pep_status === 'Foreign PEP' ? 'selected' : '' %>>Foreign PEP</option>
+        <option value="Domestic PEP" <%= client.pep_status === 'Domestic PEP' ? 'selected' : '' %>>Domestic PEP</option>
+      </select>
+
+      <select name="source_of_funds" required>
+        <option value="">Source of Funds</option>
+        <option value="Salary" <%= client.source_of_funds === 'Salary' ? 'selected' : '' %>>Salary</option>
+        <option value="Cryptocurrency Proceeds" <%= client.source_of_funds === 'Cryptocurrency Proceeds' ? 'selected' : '' %>>Cryptocurrency Proceeds</option>
+        <option value="Savings" <%= client.source_of_funds === 'Savings' ? 'selected' : '' %>>Savings</option>
+      </select>
+
+      <input type="hidden" name="existing_image" value="<%= client.image %>">
+      <label>Change Image (optional):</label>
+      <input type="file" name="image">
+
+      <button type="submit" class="btn-submit mt-3">Update Client</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

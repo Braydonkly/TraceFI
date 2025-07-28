@@ -1,0 +1,99 @@
+
+<nav class="navbar navbar-expand-lg" style="background-color: #0A0F24;">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white fw-bold" href="<%= session.user ? '/home' : '/' %>">TraceFI</a>
+
+    <% if (session.user && session.user.employee_id) { %>
+      <span class="navbar-text ms-2 text-info fw-bold" style="font-size:1.1rem;">Employee ID: <%= session.user.employee_id %></span>
+    <% } %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <% /* Always define showUnread at the very top for all includes */ %>
+      <% if (typeof showUnread === 'undefined') { var showUnread = true; } %>
+      <ul class="navbar-nav ms-auto align-items-center">
+
+        <li class="nav-item">
+          <a class="nav-link text-white" href="<%= session.user ? '/home' : '/' %>">Home</a>
+        </li>
+
+
+        <% if (session.user) { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Services
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="servicesDropdown">
+              <% if (session.user.role === 'admin') { %>
+                <li><a class="dropdown-item text-white" href="/institutions">View Institutions</a></li>
+                <li><a class="dropdown-item text-white" href="/register-admin">Register New Admin</a></li>
+
+              <% } else if (session.user.role === 'user') { %>
+                <li><a class="dropdown-item text-white" href="/institutions">View Institutions</a></li>
+                <li><a class="dropdown-item text-white" href="/all-clients">View Clients</a></li>
+                <li><a class="dropdown-item text-white" href="/addclient1">Add Client</a></li>
+                <li><a class="dropdown-item text-white" href="/reports">View Report</a></li>
+              <% } %>
+
+              <li><a class="dropdown-item text-white" href="/view-admins">View Admins</a></li>
+
+              <li><hr class="dropdown-divider border-light"></li>
+                <% if (session.user.role === 'admin') { %>
+                <li><a class="dropdown-item text-white" href="/adminaccount">My Account</a></li>
+              <% } else if (session.user.role === 'user') { %>
+                <li><a class="dropdown-item text-white" href="/myaccount">My Account</a></li>
+              <% } %>
+            </ul>
+          </li>
+
+          <li class="nav-item me-3">
+            <a href="/notifications" class="btn btn-link position-relative nav-link" style="color: #fff; font-size: 1.5rem;">
+              <i class="bi bi-bell"></i>
+            </a>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white fw-semibold" href="/logout">Logout</a>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link text-white fw-semibold" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white fw-semibold" href="/register">Signup</a>
+          </li>
+        <% } %>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .navbar .nav-link:hover,
+  .navbar .dropdown-toggle:hover {
+    color: #00FFD1 !important;
+  }
+
+  .dropdown-menu {
+    background-color: #0A0F24;
+    border: 1px solid #222;
+    border-radius: 8px;
+  }
+
+  .dropdown-item {
+    transition: background-color 0.2s ease;
+  }
+
+  .dropdown-item:hover {
+    background-color: #112244;
+    color: #00FFD1 !important;
+  }
+
+  .dropdown-divider {
+    border-color: #444;
+  }
+</style>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Onboarding - TraceFI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #0A0F24;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background: url('/images/client1.jpg') center/cover no-repeat;
+      filter: blur(2px) brightness(0.6);
+      z-index: -1;
+    }
+    .form-container {
+      max-width: 650px;
+      background-color: white;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 30px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+      color: #000;
+    }
+    h1 {
+      font-size: 1.8rem;
+      border: 3px solid #a259ff;
+      padding: 10px;
+      display: inline-block;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .form-group { text-align: left; margin-top: 15px; }
+    label { font-weight: bold; display: block; margin-bottom: 8px; }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    .btn-submit {
+      width: 100%;
+      background-color: #00cfff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: bold;
+    }
+    .btn-submit:hover { background-color: #00a6cc; }
+  </style>
+</head>
+<body>
+
+<%- include('partials/navbar.ejs') %>
+
+<div class="container my-5">
+  <div class="form-container">
+    <h1>Client Onboarding Application</h1>
+    <form id="clientForm" action="/addclient" method="POST" enctype="multipart/form-data">
+      <input type="text" name="client_name" id="client_name" placeholder="Full Name" required>
+      <input type="text" name="client_NRIC" id="client_NRIC" placeholder="NRIC / Passport" required>
+      <input type="text" name="client_nationality" id="client_nationality" placeholder="Nationality" required>
+      <input type="text" name="client_citizenship" id="client_citizenship" placeholder="Citizenship" required>
+      <input type="text" name="client_address" id="client_address" placeholder="Address" required>
+      <input type="text" name="client_postalcode" id="client_postalcode" placeholder="Postal Code" required>
+      <input type="text" name="client_gender" id="client_gender" placeholder="Gender" required>
+      <input type="text" name="client_cob" id="client_cob" placeholder="Country of Birth" required>
+      <input type="date" name="client_dob" id="client_dob" required>
+      <input type="text" name="client_home_number" id="client_home_number" placeholder="Home Number">
+      <input type="text" name="client_phone_number" id="client_phone_number" placeholder="Phone Number" required>
+      <input type="text" name="client_occupation" id="client_occupation" placeholder="Occupation" required>
+      <input type="text" name="client_employer_name" id="client_employer_name" placeholder="Employer Name" required>
+      <input type="text" name="client_employer_number" id="client_employer_number" placeholder="Employer Contact" required>
+      <select name="customer_type" id="customer_type" required>
+        <option value="">Customer Type</option>
+        <option value="Individual">Individual</option>
+        <option value="Offshore company">Offshore company</option>
+        <option value="Trust">Trust</option>
+      </select>
+      <select name="pep_status" id="pep_status" required>
+        <option value="">PEP Status</option>
+        <option value="None">None</option>
+        <option value="Foreign PEP">Foreign PEP</option>
+        <option value="Domestic PEP">Domestic PEP</option>
+      </select>
+      <select name="source_of_funds" id="source_of_funds" required>
+        <option value="">Source of Funds</option>
+        <option value="Salary">Salary</option>
+        <option value="Cryptocurrency Proceeds">Cryptocurrency Proceeds</option>
+        <option value="Savings">Savings</option>
+      </select>
+      <input type="file" name="image" id="image" accept="image/*">
+      <button type="submit" class="btn-submit mt-3">Add Client</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>       

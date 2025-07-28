@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications - TraceFI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body { background: #0A0F24; color: #fff; }
+    .notif-list { max-width: 700px; margin: 40px auto; background: #fff; color: #222; border-radius: 18px; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+    .notif-item { border-bottom: 1px solid #eee; padding: 18px 24px; }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-title { font-weight: bold; }
+    .notif-time { font-size: 0.9em; color: #888; }
+    .notif-unread { background: #e6f7ff; }
+    .notif-link { word-break: break-all; }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar.ejs', { showUnread: false }) %>
+  <div class="notif-list">
+    <h2 class="p-4 pb-2">Notifications</h2>
+    <% if (notifications && notifications.length > 0) { %>
+      <% notifications.forEach(function(notif, idx) { %>
+        <div class="notif-item<%= notif.is_read ? '' : ' notif-unread' %>">
+          <div class="notif-title"><%= notif.title %></div>
+          <div class="notif-time mb-1"><%= notif.time %></div>
+          <div><%= notif.message %></div>
+          <% if (notif.link) { %>
+            <a href="<%= notif.link %>" target="_blank" class="btn btn-sm btn-primary mt-2 notif-link">Open</a>
+            <div class="small mt-1 d-flex align-items-center" style="word-break: break-all;">
+              <a href="<%= notif.link %>" target="_blank" style="color:#0A0F24; text-decoration:underline;">
+                <%= notif.link %>
+              </a>
+              <% if (notif.link.startsWith('mailto:') || notif.link.includes('mail.google.com')) { %>
+                <a href="<%= notif.link %>" target="_blank" class="ms-2" title="Open Email">
+                  <i class="bi bi-envelope-fill" style="font-size:1.2em;color:#0A0F24;"></i>
+                </a>
+              <% } %>
+            </div>
+          <% } %>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="p-4">No notifications found.</div>
+    <% } %>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

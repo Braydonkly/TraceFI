@@ -1,0 +1,16 @@
+<html>
+  <body>
+    <p>Dear <%= fiName %>,</p>
+    <p>Your response (<b><%= responseType %></b>) for client <b><%= clientName %></b> has been recorded successfully in TraceFI.</p>
+    <p style="color:orange;font-size:1.1em;">Note: <b>ACCEPT</b> means <b>block</b> the client (deny onboarding). <b>REJECT</b> means <b>allow</b> the client to continue onboarding for further assessment.</p>
+    <p>Thank you for your prompt action.</p>
+    <p>TraceFI Compliance Platform</p>
+    <% if (typeof redirectHome !== 'undefined' && redirectHome) { %>
+      <div style="margin-top:20px; color:green; font-weight:bold;">You are signed in. Redirecting to your dashboard...</div>
+      <script>
+        setTimeout(function() { window.location.href = '/home'; }, 2000);
+      </script>
+      <a href="/home" class="btn btn-primary mt-3">Go to Dashboard</a>
+    <% } %>
+  </body>
+</html>

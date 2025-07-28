@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Institution Details | TraceFI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background-color: #0A0F24;
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #9CA3AF;
+      display: block;
+    }
+
+    .institution-card {
+      background-color: #1A1D3A;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 0 auto 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .institution-card p {
+      margin: 0 0 12px;
+      color: #e5e7eb;
+    }
+
+    .btn-outline-info, .btn-outline-danger {
+      border-radius: 30px;
+      font-weight: 600;
+      padding: 8px 20px;
+    }
+
+    .btn i {
+      font-size: 1rem;
+    }
+
+    .btn-back {
+      background-color: #00C4FF;
+      color: #0A0F24;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 15px;
+    }
+
+    .btn-back:hover {
+      background-color: #00a8e1;
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <main class="container py-5">
+    <div class="institution-card">
+      <h2 class="mb-4 text-center">Institution Details</h2>
+
+      <% if (institution) { %>
+        <p><span class="info-label">Institution Name:</span> <%= institution.institute_name %></p>
+        <p><span class="info-label">Email:</span> <%= institution.institute_email %></p>
+        <p><span class="info-label">Contact Name:</span> <%= institution.institute_contact_name %></p>
+        <p><span class="info-label">Phone:</span> <%= institution.institute_phone_number %></p>
+
+        <% if (session.user && session.user.role === 'admin') { %>
+          <div class="text-center d-flex justify-content-center gap-2 mt-3">
+            <form method="POST" action="/deleteFI/<%= institution.FI_id %>" onsubmit="return confirm('Are you sure?')">
+              <button class="btn btn-outline-danger d-flex align-items-center gap-1">
+                <i class="bi bi-trash3"></i> Delete
+              </button>
+            </form>
+          </div>
+        <% } %>
+      <% } else { %>
+        <p class="text-danger">Institution not found.</p>
+      <% } %>
+    </div>
+
+    <div class="text-center">
+      <a href="/institutions" class="btn-back">Back to All Institutions</a>
+    </div>
+  </main>
+
+</body>
+</html>

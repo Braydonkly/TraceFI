@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TraceFI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Sticky Navbar */
+        .sticky-top {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            background: #0A0F24;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #0A0F24; /* Dark Blue Background */
+            color: #ffffff;
+        }
+
+        /* Card Animation */
+        .card-custom {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        .card-custom.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card-custom .feature-icon {
+            font-size: 2.5rem;
+            color: #00FFD1;
+            margin-bottom: 18px;
+        }
+
+        /* Back to Top Button */
+        #backToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 999;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #backToTopBtn:hover {
+            background: #1e40af;
+        }
+
+        /* Responsive Feature Cards */
+        @media (max-width: 991px) {
+            .feature-section .row > div[class^='col-'] {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+        @media (max-width: 767px) {
+            .feature-section .row > div[class^='col-'] {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            .about-section .row {
+                flex-direction: column-reverse;
+            }
+        }
+
+        /* Hero / Slideshow */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 90vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+        }
+
+        .text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 2;
+        }
+
+        .text-overlay h1 {
+            font-size: 60px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .text-overlay p {
+            font-size: 22px;
+            margin-bottom: 30px;
+            color: #cccccc;
+        }
+
+        .custom-button {
+            background-color: #00FFD1;
+            color: #0A0F24;
+            padding: 9px 35px;
+            font-size: 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .custom-button:hover {
+            background-color: #00ccaa;
+            color: #ffffff;
+        }
+
+        /* About Us Section */
+        .about-section {
+            padding: 80px 20px;
+            text-align: center;
+            background-color: #0D122E;
+        }
+
+        .about-section h2 {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .about-section p {
+            font-size: 20px;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #cccccc;
+        }
+        .feature-section {
+            padding: 80px 0;
+        }
+
+        .card-custom {
+            background-color: #0D122E;
+            color: #ffffff;
+            border: none;
+            border-radius: 15px;
+            text-align: center;
+            padding: 40px 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-custom h5 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-custom p {
+            font-size: 16px;
+            color: #cccccc;
+            margin-bottom: 30px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #0A0F24;
+            color: #cccccc;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #00FFD1;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .footer a:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sticky-top">
+  <%- include('partials/navbar.ejs') %>
+</div>
+
+<!-- Hero / Slideshow Section -->
+<div class="slideshow-container">
+    <div class="slide">
+        <img src="/images/blockchain.jpg" alt="Top Up">
+        <div class="text-overlay">
+            <h1>AML Isn’t Obvious — Until It’s Too <span class="text-danger">Late</span></h1>
+            <p>Uncover hidden risks before they escalate. TraceFI helps you assess, verify, and collaborate on AML intelligence across institutions.</p>
+            <a href="/register" class="custom-button">Join Now</a>
+        </div>
+    </div>
+
+    <div class="slide">
+        <img src="/images/aml.jpg" alt="Payment">
+        <div class="text-overlay">
+            <h1>AML Isn’t Obvious — Until It’s Too <span class="text-danger">Late</span></h1>
+            <p>Uncover hidden risks before they escalate. TraceFI helps you assess, verify, and collaborate on AML intelligence across institutions.</p>
+            <a href="/register" class="custom-button">Join Now</a>
+        </div>
+    </div>
+
+    <div class="slide">
+        <img src="/images/kyc.jpg" alt="History">
+        <div class="text-overlay">
+            <h1>AML Isn’t Obvious — Until It’s Too <span class="text-danger">Late</span></h1>
+            <p>Uncover hidden risks before they escalate. TraceFI helps you assess, verify, and collaborate on AML intelligence across institutions.</p>
+            <a href="/register" class="custom-button">Join Now</a>
+        </div>
+    </div>
+</div>
+
+<!-- About Us Section -->
+<div class="about-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Image Column -->
+            <div class="col-md-6 mb-4 mb-md-0">
+                <img src="/images/flag.jpg" alt="About TraceFI" class="img-fluid rounded-4 shadow-lg">
+            </div>
+            <!-- Text Column -->
+            <div class="col-md-6 text-start">
+                <h2>About TraceFI</h2>
+                <p>
+                    TraceFI is a cutting-edge platform designed for financial institutions to combat money laundering. 
+                    Collaborate seamlessly with fellow institutions to flag suspicious activities, verify client histories, 
+                    and share real-time AML data securely. Enhance regulatory compliance while protecting the integrity 
+                    of your institution.
+                </p>
+                <a href="/moreDetails" class="btn btn-outline-primary rounded-pill mt-4">More Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feature Section -->
+<div class="container feature-section">
+    <h2 class="text-center mb-5">Core Features</h2>
+    <div class="row g-4">
+        <!-- Feature 1 -->
+        <div class="col-md-3 d-flex">
+            <div class="card-custom h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="feature-icon"><i class="bi bi-person-badge"></i></div>
+                  <h5>Client Risk Assessment</h5>
+                  <p>Automated risk scoring based on KYC, geography, occupation, PEP, and more. Supports secure client onboarding and duplicate/blacklist checks.</p>
+                </div>
+                <a href="/login" class="btn btn-outline-primary rounded-pill mt-auto">Assess Now</a>
+            </div>
+        </div>
+        <!-- Feature 2 -->
+        <div class="col-md-3 d-flex">
+            <div class="card-custom h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="feature-icon"><i class="bi bi-people-check"></i></div>
+                  <div class="feature-icon"><i class="bi bi-diagram-3"></i></div>
+                  <h5>Multi-Institution Review</h5>
+                  <p>FIs can accept or reject client risk status, with reason capture and full voting/audit trail. All responses notify the initiating FI.</p>
+                </div>
+                <a href="/login" class="btn btn-outline-primary rounded-pill mt-auto">Review Clients</a>
+            </div>
+        </div>
+        <!-- Feature 3 -->
+        <div class="col-md-3 d-flex">
+            <div class="card-custom h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="feature-icon"><i class="bi bi-bar-chart-line"></i></div>
+                  <h5>Analytics & Dashboard</h5>
+                  <p>Visualize country risk, transaction monitoring, and client status. Real-time updates and compliance reporting for admins.</p>
+                </div>
+                <a href="/login" class="btn btn-outline-primary rounded-pill mt-auto">View Dashboard</a>
+            </div>
+        </div>
+        <!-- Feature 4 -->
+        <div class="col-md-3 d-flex">
+            <div class="card-custom h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="feature-icon"><i class="bi bi-bell"></i></div>
+                  <h5>Notifications & Audit Trail</h5>
+                  <p>Automated email and in-app notifications for all actions. Optional blockchain integration for tamper-proof audit logs.</p>
+                </div>
+                <a href="/login" class="btn btn-outline-primary rounded-pill mt-auto">See Activity</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+<!-- Testimonials / Trust Section -->
+<div class="container my-5">
+  <h3 class="text-center mb-4">Trusted by Leading Institutions</h3>
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-3 mb-3 text-center">
+      <img src="/images/ocbc.png" alt="OCBC Bank" style="height:60px;object-fit:contain;" title="OCBC Bank">
+    </div>
+    <div class="col-md-3 mb-3 text-center">
+      <img src="/images/posb.png" alt="POSB" style="height:60px;object-fit:contain;" title="POSB">
+    </div>
+    <div class="col-md-3 mb-3 text-center">
+      <img src="/images/maybank.png" alt="Maybank" style="height:60px;object-fit:contain;" title="Maybank">
+    </div>
+    <div class="col-md-3 mb-3 text-center">
+      <img src="/images/mas.png" alt="MAS" style="height:60px;object-fit:contain;" title="Monetary Authority of Singapore">
+    </div>
+  </div>
+</div>
+<!-- Back to Top Button -->
+<button onclick="topFunction()" id="backToTopBtn" title="Back to Top"><i class="bi bi-arrow-up"></i></button>
+    <p>&copy; 2025 TraceFI</p>
+    <p>
+        <a href="/moreDetails">About Us</a> | 
+        <a href="/contactUs">Contact Us</a> | 
+        <a href="/privacy">Privacy Policy</a>
+    </p>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Card fade-in animation on scroll
+    function revealCards() {
+      var cards = document.querySelectorAll('.card-custom');
+      var windowHeight = window.innerHeight;
+      cards.forEach(function(card) {
+        var cardTop = card.getBoundingClientRect().top;
+        if (cardTop < windowHeight - 50) {
+          card.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', revealCards);
+    window.addEventListener('load', revealCards);
+
+    // Back to Top Button
+    var backToTopBtn = document.getElementById('backToTopBtn');
+    window.onscroll = function() {scrollFunction()};
+    function scrollFunction() {
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
+      }
+    }
+    function topFunction() {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        const slides = document.getElementsByClassName("slide");
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) { slideIndex = 1; }
+        slides[slideIndex - 1].style.display = "block";
+        setTimeout(showSlides, 4000);
+    }
+</script>
+
+</body>
+</html>
